@@ -24,7 +24,9 @@ export const getKeysByDescriptor = (object, descriptor) => {
  * @param {Object} object
  * @returns {boolean}
  */
-export const isObjectAnyFrozen = (object) => { };
+export const isObjectAnyFrozen = (object) => {
+    return Object.isFrozen(object) || Object.isSealed(object) && !Object.isExtensible(object) ? true : false;
+};
 
 /**
  * Принимает объект и строку. Мы должны вернуть НОВЫЙ объект(копию оригинального), в котором
