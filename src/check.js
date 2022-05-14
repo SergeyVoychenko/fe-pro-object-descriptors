@@ -51,7 +51,8 @@ const obj = {};
 const res = assignLockedValues(obj, 'name');
 
 console.log(res !== obj); // true
-console.log(res.name); // null
+// console.log(res.name); // null
+console.log(Object.getOwnPropertyDescriptors(res));
 
 const objWithProp = {
   name: 'test',
