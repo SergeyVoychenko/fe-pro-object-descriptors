@@ -9,14 +9,7 @@
  * @returns string[]
  */
 export const getKeysByDescriptor = (object, descriptor) => {
-    const obj = Object.getOwnPropertyDescriptors(object);
-    const arr = [];
-    for (let key in obj) {
-        if (obj[key][descriptor] === true) {
-            arr.push(key);
-        }
-    }
-    return arr;
+    return Object.entries(Object.getOwnPropertyDescriptors(object)).filter(([,obj]) => obj[descriptor]).map(([key]) => key);
 };
 
 /**
@@ -25,7 +18,7 @@ export const getKeysByDescriptor = (object, descriptor) => {
  * @returns {boolean}
  */
 export const isObjectAnyFrozen = (object) => {
-    return Object.isFrozen(object) || Object.isSealed(object) && !Object.isExtensible(object) ? true : false;
+    return Object.isFrozen(object) || Object.isSealed(object) || !Object.isExtensible(object);
 };
 
 /**
@@ -40,8 +33,8 @@ export const isObjectAnyFrozen = (object) => {
  */
 export const assignLockedValues = (object, propertyName) => {
     const obj = Object.assign({}, object);
-    if (obj[propertyName] === undefined) {
-        obj[propertyName] = null
+    if (!(propertyName in object)) {
+        obj[propertyName] = null;
     };
     Object.defineProperty(obj, propertyName, { value: obj[propertyName], writable: false, enumerable: true, configurable: true });
     return obj;
